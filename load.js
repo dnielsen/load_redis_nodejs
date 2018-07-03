@@ -29,7 +29,7 @@ fs.createReadStream(fileName)
     if(arrayOfRows.length){
       // Save each row as HashMap with Title as key
       arrayOfRows.forEach(row=>{
-        client.hset(row.Title, "Votes",row.Votes , redis.print);
+        client.hset(row.Title, "Votes",row[Object.keys(row)[0]] , redis.print);
         client.hset(row.Title, "Answers",row.Answers , redis.print);
         client.hset(row.Title, "Views",row.Views , redis.print);
         client.hset(row.Title, "Title",row.Title , redis.print);
@@ -47,6 +47,7 @@ fs.createReadStream(fileName)
       client.hkeys(row.Title,(err,keys)=>{
         // Get All Title's Keys
         keys.forEach(function (key, i) {
+          console.log(key);
             // Foreach key get value ..
             client.hget(row.Title,key,(err,data)=>{
               console.log(data);
