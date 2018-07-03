@@ -25,17 +25,34 @@ fs.createReadStream(fileName)
     arrayOfRows.push(row);
     // this event will be fired when complete read and convert csv file into javascript data.
   }).on('end',function(){
-    // Convert arrayOfRows into JSON formate using JSON.stringify Method
-    // Store json data into Redis in Key with name 'csv_data'
+
     if(arrayOfRows.length){
-      client.set("csv_data",JSON.stringify(arrayOfRows), redis.print);
+      // Save each row as HashMap with Title as key
+      arrayOfRows.forEach(row=>{
+        client.hset(row.Title, "Votes",row.Votes , redis.print);
+        client.hset(row.Title, "Answers",row.Answers , redis.print);
+        client.hset(row.Title, "Views",row.Views , redis.print);
+        client.hset(row.Title, "Title",row.Title , redis.print);
+        client.hset(row.Title, "Description",row.Description , redis.print);
+        client.hset(row.Title, "Tag",row.Tag , redis.print);
+        client.hset(row.Title, "Date",row.Date , redis.print);
+        client.hset(row.Title, "User",row.User , redis.print);
+      })
     }
 
 
-    /* Test Reading data from Redis and Convert JSON into Javascript array */
-      client.get('csv_data',(err,data)=>{
-        // Read Data from Redis as JSON string and convert it into Javascript Array using JSON.parse
-        let arrayOfRows = JSON.parse(data);
-        console.log(arrayOfRows);
+
+    arrayOfRows.forEach(row=>{
+      // Get All rows using Title 'key'
+      client.hkeys(row.Title,(err,keys)=>{
+        // Get All Title's Keys
+        keys.forEach(function (key, i) {
+            // Foreach key get value ..
+            client.hget(row.Title,key,(err,data)=>{
+              console.log(data);
+            });
+        });
       });
+    });
+
   })
