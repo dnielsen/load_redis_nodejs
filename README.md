@@ -2,7 +2,6 @@
 load data into redis with node.js
 
 
-to run this demo
-
-# npm install
-# npm start 
+# to run this demo
+npm install
+npm start 
