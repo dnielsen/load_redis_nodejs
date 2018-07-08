@@ -11,11 +11,13 @@ sudo n 8.11.3
 
 # install redis 
 ```
-brew install redis // Mac
+brew install redis // Mac 
 apt-get install redis // Ubuntu
 redis-server
 ```
-- For more details, read: https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-redis-on-ubuntu-16-04
+- For more details, read: 
+- https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-redis-on-ubuntu-16-04
+- https://medium.com/@petehouston/install-and-config-redis-on-mac-os-x-via-homebrew-eb8df9a4f298
 
 
 # to run this demo
