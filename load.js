@@ -1,11 +1,4 @@
-/* make sure to remove node_modules from your repo  - that way users just need to run `npm install` */
 var redis = require('redis');
-
-/* K: generally, it's good practice to use something to import the configuration - such as `yargs`
- * that allows you to pass in a JSON file. See:
- * https://github.com/stockholmux/node-redis-rest-crud-express-boilerplate/blob/9b2998a0433a4d4418d388a04f901ccfbe21954b/index.js#L2
- * https://github.com/stockholmux/node-redis-rest-crud-express-boilerplate/blob/9b2998a0433a4d4418d388a04f901ccfbe21954b/index.js#L15
- */
 var client = redis.createClient(); //creates a new client. Defaults to 127.0.0.1 and 6379
 // var client = redis.createClient("127.0.0.1", 6379); // specify your own ip address and port
 
@@ -16,7 +9,7 @@ var path = require('path');
 
 // Load FileSystem built in Module to can read from hard disk
 var fs = require('fs');
-/* I wouldn't hard code in the csv - rather use `yargs` to bring it in from the command line  */
+
 // path.join it like  DIRECTORY_SEPERATOR in PHP Langauge
 var fileName = path.join(__dirname,"questions.csv");
 
@@ -24,7 +17,6 @@ var fileName = path.join(__dirname,"questions.csv");
 var csv = require('csv-parser')
 let arrayOfRows = [];
 
-/* K: reading from a stream is great, but maybe a bit overkill for something like this (see: synchronous API on http://csv.adaltas.com/parse/examples/) */
 // Read From Hard Disk File and PIPE output to CSV lib to can convert CSV data into JAVASCRIPT Object
 fs.createReadStream(fileName)
   .pipe(csv())
@@ -36,7 +28,6 @@ fs.createReadStream(fileName)
 
     if(arrayOfRows.length){
       // Save each row as HashMap with Title as key
-      /* K: This has no concurrency or flow control - so it's probably why this hangs instead of ends cleanly */
       arrayOfRows.forEach(row=>{
         client.hset(row.Title, "Votes",row[Object.keys(row)[0]] , redis.print);
         client.hset(row.Title, "Answers",row.Answers , redis.print);
@@ -48,4 +39,25 @@ fs.createReadStream(fileName)
         client.hset(row.Title, "User",row.User , redis.print);
       })
     }
+
+
+
+    arrayOfRows.forEach(row=>{
+      // Get All rows using Title 'key'
+      client.hkeys(row.Title,(err,keys)=>{
+        // Get All Title's Keys
+        keys.forEach(function (key, i) {
+          console.log(key);
+            // Foreach key get value ..
+            client.hget(row.Title,key,(err,data)=>{
+              console.log(data);
+            });
+        });
+      });
+    });
+
+    setTimeout(()=>{
+      client.quit();
+    },0);
+
   })
