@@ -28,3 +28,9 @@ cd load_redis_nodejs
 npm install
 npm start 
 ```
+# verify data has been loaded
+```
+redis-cli hgetall "How do I run Redis on Windows?"
+redis-cli --scan --pattern '*' // prefered because does not lock
+redis-cli keys "*" // not recommended to use KEYS
+```
