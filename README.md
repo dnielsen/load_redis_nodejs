@@ -1,5 +1,5 @@
 # load_redis_nodejs
-ldata from csv file into redis with node.js
+load data from csv file into redis with node.js
 
 # install node v8.11.3 LTS 
 ```
@@ -7,7 +7,8 @@ sudo npm cache clean -f
 sudo npm install -g n
 sudo n 8.11.3
 ```
-- For more details, read: https://stackoverflow.com/questions/7718313/how-to-change-to-an-older-version-of-node-js
+- For more details, read: 
+- https://stackoverflow.com/questions/7718313/how-to-change-to-an-older-version-of-node-js
 
 # install redis 
 ```
